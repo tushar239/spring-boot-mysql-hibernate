@@ -1,0 +1,86 @@
+package com.controllers;
+
+import com.daos.StoresProductDao;
+import com.models.manytomany.Product;
+import com.models.manytomany.Store;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+
+/*
+    @ManyToMany unidirectional
+        @JointTable annotation
+
+    @OneToMany and @ManyToMany have default FetchType=LAZY.
+
+    Detached object.
+    Fetching objects lazily.
+    Reattaching detached object to new session.
+*/
+
+@Controller
+@RequestMapping(value = "/storesproducts")
+public class StoresProductsController {
+
+    @Autowired
+    private StoresProductDao storesProductDao;
+
+    @RequestMapping(value = "/save")
+    @ResponseBody
+    public String create() {
+        try {
+
+            List<Store> stores = createStores();
+
+            for (Store store : stores) {
+                storesProductDao.save(store);
+            }
+        } catch (Exception ex) {
+            return ex.getMessage();
+        }
+        return "Stores and Products succesfully saved!";
+    }
+
+    private List<Store> createStores() {
+
+        Store store1 = new Store();
+
+        Product product1 = new Product();
+        product1.setName("p1");
+        product1.setBarcode("" + new Random().nextLong());
+        store1.addProduct(product1);
+
+        Product product2 = new Product();
+        product2.setName("p2");
+        product2.setBarcode("" + new Random().nextLong());
+        store1.addProduct(product2);
+
+
+        Store store2 = new Store();
+        store2.addProduct(product1);
+        store2.addProduct(product2);
+
+        List<Store> stores = new LinkedList<>();
+        stores.add(store1);
+        stores.add(store2);
+
+        return stores;
+    }
+
+    @RequestMapping(value = "/get")
+    @ResponseBody
+    public String get() {
+        try {
+            create();
+            storesProductDao.get(1L);
+        } catch (Exception ex) {
+            return ex.getMessage();
+        }
+        return "Stores and Products retrieved successfully!";
+    }
+}
