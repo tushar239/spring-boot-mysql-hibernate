@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@SuppressWarnings("Duplicates")
 @Repository
 public class StoresProductDao {
     @Autowired
@@ -20,8 +21,13 @@ public class StoresProductDao {
         Session session = _sessionFactory.openSession();
         try {
             Transaction transaction = session.beginTransaction();
+            // insert into store (name) values (?)
+            // insert into product (barcode, name) values (?, ?)
+            // insert into product (barcode, name) values (?, ?)
             Long storeId = (Long) session.save(store);
-            System.out.println("savedCart:" + storeId); // save returns saved object with id
+            System.out.println("saved store:" + storeId); // save returns saved object with id
+            // insert into store_product (fk_store, fk_product) values (?, ?)
+            // insert into store_product (fk_store, fk_product) values (?, ?)
             transaction.commit();
         } catch (Exception e) {
             System.out.println("transaction will be rolled back");
@@ -29,6 +35,27 @@ public class StoresProductDao {
         } finally {
             session.close();
         }
+    }
+
+
+    public void save(Product product) {
+        Session session = _sessionFactory.openSession();
+        try {
+            Transaction transaction = session.beginTransaction();
+            // insert into product (barcode, name) values (?, ?)
+            // insert into store (name) values (?)
+            Long productId = (Long) session.save(product);
+            System.out.println("saved product:" + productId); // save returns saved object with id
+            // This will not happen ------ insert into store_product (fk_store, fk_product) values (?, ?)
+            // because product has mappedBy. From mappedBy (inverse) side, entry in association table will not be made.
+            transaction.commit();
+        } catch (Exception e) {
+            System.out.println("transaction will be rolled back");
+            throw e;
+        } finally {
+            session.close();
+        }
+
     }
 
     public void get(Long id) {
@@ -51,5 +78,6 @@ public class StoresProductDao {
         System.out.println(products);
         session2.close();
     }
+
 
 }

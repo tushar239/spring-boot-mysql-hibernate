@@ -68,8 +68,8 @@ public class Store {
         if (products == null) {
             products = new LinkedList<>();
         }
-        products.add(product);
         //product.addStore(this);
+        products.add(product);
     }
 
     @Override

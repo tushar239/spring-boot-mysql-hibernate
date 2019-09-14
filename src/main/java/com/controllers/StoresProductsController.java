@@ -13,10 +13,12 @@ import java.util.List;
 import java.util.Random;
 
 /*
-    @ManyToMany unidirectional
+    @ManyToMany unidirectional and bidirectional
         @JointTable annotation
 
     @OneToMany and @ManyToMany have default FetchType=LAZY.
+
+    mappedBy - what happens if mappedBy is not there. What happens if you try to save an object which has mappedBy.
 
     Detached object.
     Fetching objects lazily.
@@ -40,6 +42,13 @@ public class StoresProductsController {
             for (Store store : stores) {
                 storesProductDao.save(store);
             }
+
+            List<Product> products = createProducts();
+
+            for (Product product : products) {
+                storesProductDao.save(product);
+            }
+
         } catch (Exception ex) {
             return ex.getMessage();
         }
@@ -47,19 +56,17 @@ public class StoresProductsController {
     }
 
     private List<Store> createStores() {
-
-        Store store1 = new Store();
-
         Product product1 = new Product();
         product1.setName("p1");
         product1.setBarcode("" + new Random().nextLong());
-        store1.addProduct(product1);
 
         Product product2 = new Product();
         product2.setName("p2");
         product2.setBarcode("" + new Random().nextLong());
-        store1.addProduct(product2);
 
+        Store store1 = new Store();
+        store1.addProduct(product1);
+        store1.addProduct(product2);
 
         Store store2 = new Store();
         store2.addProduct(product1);
@@ -70,6 +77,20 @@ public class StoresProductsController {
         stores.add(store2);
 
         return stores;
+    }
+
+    private List<Product> createProducts() {
+        Store store3 = new Store();
+
+        Product product3 = new Product();
+        product3.setName("p3");
+        product3.setBarcode("" + new Random().nextLong());
+        product3.addStore(store3);
+
+        List<Product> products = new LinkedList<>();
+        products.add(product3);
+
+        return products;
     }
 
     @RequestMapping(value = "/get")
