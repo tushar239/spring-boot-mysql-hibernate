@@ -26,14 +26,33 @@ public class CartItemsController {
     @Autowired
     private CartItemsDao cartItemsDao;
 
-    @RequestMapping(value = "/save")
+    @RequestMapping(value = "/saveCart")
     @ResponseBody
-    public String create() {
+    public String saveCart() {
         try {
 
             Cart cart = createCart();
 
             cartItemsDao.save(cart);
+        } catch (Exception ex) {
+            return ex.getMessage();
+        }
+        return "Cart succesfully saved!";
+    }
+
+    @RequestMapping(value = "/saveItem")
+    @ResponseBody
+    public String saveItem() {
+        try {
+
+            Cart cart = new Cart();
+
+            Item item = new Item();
+            item.setName("table" + UUID.randomUUID());
+            //item1.setCart(cart);// this is done in Cart's addItem
+            item.setCart(cart);
+
+            cartItemsDao.save(item);
         } catch (Exception ex) {
             return ex.getMessage();
         }

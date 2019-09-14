@@ -60,6 +60,7 @@ The resulting SQL is as follows:
 */
 
 
+@SuppressWarnings("Duplicates")
 @Repository
 //@Transactional // HibernateTransactionManager is added in spring context. So, this will be hibernate transaction
 public class CartItemsDao {
@@ -77,6 +78,9 @@ public class CartItemsDao {
         try {
 
             Transaction transaction = session.beginTransaction();
+            // insert into cart values ( )
+            // insert into item (cart_id, name) values (?, ?)
+            // insert into item (cart_id, name) values (?, ?)
             Long savedCartId = (Long) session.save(cart);// without Cascade on OneToMany, items will not be inserted
             System.out.println("savedCart:" + savedCartId); // save returns saved object with id
             session.flush();
@@ -89,6 +93,26 @@ public class CartItemsDao {
             //Cart cart1 = (Cart) session.get(Cart.class, new Long(1));
             //System.out.println(cart1.getId());
             //System.out.println(cart1.getItems());
+        } catch (Exception e) {
+            System.out.println("transaction will be rolled back");
+            throw e;
+        } finally {
+            session.close();
+        }
+    }
+
+    public void save(Item item) {
+        Session session = _sessionFactory.openSession();
+        try {
+
+            Transaction transaction = session.beginTransaction();
+            // insert into cart values ( )
+            // insert into item (cart_id, name) values (?, ?)
+            Long savedItemId = (Long) session.save(item);// without Cascade on OneToMany, items will not be inserted
+            System.out.println("saved item:" + savedItemId); // save returns saved object with id
+            session.flush();
+            transaction.commit();
+
         } catch (Exception e) {
             System.out.println("transaction will be rolled back");
             throw e;
