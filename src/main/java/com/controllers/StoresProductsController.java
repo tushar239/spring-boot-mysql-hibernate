@@ -65,10 +65,12 @@ public class StoresProductsController {
         product2.setBarcode("" + new Random().nextLong());
 
         Store store1 = new Store();
+        store1.setName("walmart");
         store1.addProduct(product1);
         store1.addProduct(product2);
 
         Store store2 = new Store();
+        store2.setName("target");
         store2.addProduct(product1);
         store2.addProduct(product2);
 
@@ -81,6 +83,7 @@ public class StoresProductsController {
 
     private List<Product> createProducts() {
         Store store3 = new Store();
+        store3.setName("fred mayer");
 
         Product product3 = new Product();
         product3.setName("p3");

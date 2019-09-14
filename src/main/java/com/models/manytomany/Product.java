@@ -23,8 +23,8 @@ public class Product {
     @Column(unique = true)
     private String barcode;
 
-    // IMP - Without mappedBy, it will create another association table product_store with columns (product_product_id, stores_store_id)
-    // IMP - If the association is bidirectional, one side has to be the owner and one side has to be the inverse end (ie. it will be ignored when updating the relationship values in the association table):
+    // Without mappedBy, it will create another association table product_store with columns (product_product_id, stores_store_id)
+    // If the association is bidirectional, one side has to be the owner and one side has to be the inverse end (ie. it will be ignored when updating the relationship values in the association table):
     // So, the side which has the mappedBy attribute is the inverse side. The side which doesn't have the mappedBy attribute is the owner.
     // Here Store is the owner. So, when you save store, entries in store_product table will be added.
     // But when you save product, no entry will be added in store_product.
