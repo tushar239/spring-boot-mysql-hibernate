@@ -74,31 +74,8 @@ public class CartItemsDao {
 
     public void save(Cart cart) {
 
-        Session session = _sessionFactory.openSession();
-        try {
 
-            Transaction transaction = session.beginTransaction();
-            // insert into cart values ( )
-            // insert into item (cart_id, name) values (?, ?)
-            // insert into item (cart_id, name) values (?, ?)
-            Long savedCartId = (Long) session.save(cart);// without Cascade on OneToMany, items will not be inserted
-            System.out.println("savedCart:" + savedCartId); // save returns saved object with id
-            session.flush();
-            transaction.commit();
 
-            // If session is cleared, Cart object will not be inside session object. So, below session.get will fire a select query.
-            // Otherwise, session.get will retrieve Cart object from session only. It won't fire a select query.
-            //session.clear();
-
-            //Cart cart1 = (Cart) session.get(Cart.class, new Long(1));
-            //System.out.println(cart1.getId());
-            //System.out.println(cart1.getItems());
-        } catch (Exception e) {
-            System.out.println("transaction will be rolled back");
-            throw e;
-        } finally {
-            session.close();
-        }
     }
 
     public void save(Item item) {

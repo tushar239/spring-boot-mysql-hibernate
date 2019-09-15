@@ -1,10 +1,9 @@
 package com.controllers;
 
-import com.models.onetomany_manytoone.Cart;
 import com.daos.CartItemsDao;
+import com.models.onetomany_manytoone.Cart;
 import com.models.onetomany_manytoone.Item;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -18,9 +17,11 @@ import java.util.UUID;
    Writing JOIN query
    Cascading
    FetchMode.SELECT (default), JOIN, SUBSELECT
+
+   'Fetch' with JOIN query
+
  */
-@Controller
-@RequestMapping(value = "/cartitems")
+
 public class CartItemsController {
 
     @Autowired
